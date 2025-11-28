@@ -100,8 +100,9 @@ class MyFeatureCompression:
         self.u_cluster = None # copy for cluster computation
         self.classifier = MyDecentralized(K)
 
-    def run_LP(self, X, centroids, N, n_c):
+    def run_LP(self, X, centroids, n_c):
         # Decision variables
+        N = X.shape[0]
         u = cp.Variable((N, n_c), boolean=True)
         # squared L2 distances
         dists = ((X[:, None, :] - centroids[None, :, :]) ** 2).sum(axis=2)
@@ -177,7 +178,7 @@ class MyFeatureCompression:
                     if np.allclose(centroids, centroids_prev, atol=1e-6):
                         stop = True
                         break
-                val = self.run_LP(trainX, centroids, N, n_c)
+                val = self.run_LP(trainX, centroids, n_c)
                 
                 # Save parameters
                 self.u = val
@@ -191,7 +192,7 @@ class MyFeatureCompression:
             self.classifier.train(quantized, trainY)
             print("Finished training classifier")
 
-            test_u = self.run_LP(testX, centroids, testX.shape[0], n_c)
+            test_u = self.run_LP(testX, centroids, n_c)
             test_quantized = test_u@centroids
             test_acc = self.classifier.evaluate(test_quantized, testY)
             test_accuracy.append(test_acc)
