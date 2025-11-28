@@ -1,0 +1,13 @@
+name: cvxproj
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - cvxpy
+  - pip
+  - pip:
+      - Mosek
+      - scikit-learn
+      - matplotlib
+      - jupyter

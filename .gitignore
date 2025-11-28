@@ -1,0 +1,5 @@
+*.pdf
+Data/
+.vscode/
+__pycache__/
+*.zip
