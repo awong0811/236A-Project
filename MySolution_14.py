@@ -96,13 +96,12 @@ class MyFeatureCompression:
         # TODO: add any state you need (e.g., bit candidates, a base classifier)
         # classifier
         # assignment variable
-        self.u = None # shape (N, k)
-        self.u_cluster = None # copy for cluster computation
+        self.u_cluster = None
         self.classifier = MyDecentralized(K)
 
     def run_LP(self, X, centroids, n_c):
-        # Decision variables
         N = X.shape[0]
+        # Decision variables (cluster assignment)
         u = cp.Variable((N, n_c), boolean=True)
         # squared L2 distances
         dists = ((X[:, None, :] - centroids[None, :, :]) ** 2).sum(axis=2)
@@ -181,7 +180,6 @@ class MyFeatureCompression:
                 val = self.run_LP(trainX, centroids, n_c)
                 
                 # Save parameters
-                self.u = val
                 self.u_cluster = val
                 centroids_prev = centroids
             
